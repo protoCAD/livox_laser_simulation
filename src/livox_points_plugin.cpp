@@ -63,9 +63,6 @@ void LivoxPointsPlugin::Load(gazebo::sensors::SensorPtr _parent, sdf::ElementPtr
     rosPointPub = rosNode->advertise<sensor_msgs::PointCloud2>(curr_scan_topic, 5);
 
     raySensor = _parent;
-    auto sensor_pose = raySensor->Pose();
-    SendRosTf(sensor_pose, raySensor->ParentName(), raySensor->Name());
-
     node = transport::NodePtr(new transport::Node());
     node->Init(raySensor->WorldName());
     scanPub = node->Advertise<msgs::LaserScanStamped>(_parent->Topic(), 50);
@@ -119,8 +116,6 @@ void LivoxPointsPlugin::OnNewLaserScans() {
         msgs::Set(laserMsg.mutable_time(), world->SimTime());
         msgs::LaserScan *scan = laserMsg.mutable_scan();
         InitializeScan(scan);
-
-        SendRosTf(parentEntity->WorldPose(), world->Name(), raySensor->ParentName());
 
         auto rayCount = RayCount();
         auto verticalRayCount = VerticalRayCount();
@@ -186,7 +181,7 @@ void LivoxPointsPlugin::OnNewLaserScans() {
         sensor_msgs::PointCloud2 scan_points_msg;
         pcl::toROSMsg(scan_points, scan_points_msg);
         scan_points_msg.header.stamp = ros::Time::now();
-        scan_points_msg.header.frame_id = "livox";
+        scan_points_msg.header.frame_id = raySensor->Name();
         rosPointPub.publish(scan_points_msg);
         ros::spinOnce();
     }

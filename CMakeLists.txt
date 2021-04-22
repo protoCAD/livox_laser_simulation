@@ -13,9 +13,6 @@ find_package(gazebo REQUIRED)
 find_package(PCL REQUIRED)
 include_directories(${GAZEBO_INCLUDE_DIRS})
 
-#To solve the error which gazebo does not handle the include file well, we must add this line.
-include_directories(/usr/include/gazebo-7/gazebo)
-
 link_directories(${GAZEBO_LIBRARY_DIRS})
 
 #This is designed for whose proto installed in system is not 2.6. We can install the version of proto in local dir
