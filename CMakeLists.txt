@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(gazebo REQUIRED)
 find_package(PCL REQUIRED)
+find_package(ODE REQUIRED)
 include_directories(${GAZEBO_INCLUDE_DIRS})
 
 link_directories(${GAZEBO_LIBRARY_DIRS})
